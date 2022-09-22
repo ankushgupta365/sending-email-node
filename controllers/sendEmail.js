@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer')
+const sgMail = require('@sendgrid/mail')
 const sendEmailFuncEtheral = async (req, res) => {
     //creating test smtp service account
     let testAccount = await nodemailer.createTestAccount();
@@ -22,7 +23,16 @@ const sendEmailFuncEtheral = async (req, res) => {
     res.json(info)
 }
 const sendEmailFunc = async(req,res)=>{
-    res.send("sending email from twilio sendgrid")
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+    const msg = {
+        to: 'ankushguptap999@gmail.com', // Change to your recipient
+        from: 'ankushgupta365@gmail.com', // Change to your verified sender
+        subject: 'Sending with SendGrid is Fun',
+        text: 'and easy to do anywhere, even with Node.js',
+        html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+      }
+      const response = await sgMail.send(msg)
+    res.json(response)
 }
 
 module.exports = sendEmailFunc
